@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8" /></head>
+<body>
+<script>
+  // Read our redirect target from URL
+  const params = new URLSearchParams(location.search);
+  const redirect = params.get('redirect');
+  if (!redirect) {
+    document.body.innerText = 'Missing redirect URL';
+    throw new Error('Missing redirect');
+  }
+
+  // Ask for GPS
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      // Redirect back into the app with coords
+      window.location.href = `${redirect}?lat=${lat}&lng=${lng}`;
+    },
+    err => {
+      alert('Could not get location: ' + err.message);
+    },
+    { enableHighAccuracy: true, timeout:10000 }
+  );
+</script>
+</body>
+</html>
